@@ -1,5 +1,9 @@
 package org.serratec.backend.servicedto.dto;
 
+import java.util.Set;
+
+import org.serratec.backend.servicedto.model.Perfil;
+
 public class UsuarioInserirDTO {
 
 	private String nome;
@@ -9,6 +13,8 @@ public class UsuarioInserirDTO {
 	private String senha;
 
 	private String confirmaSenha;
+
+	private Set<Perfil> perfis;
 
 	public String getNome() {
 		return nome;
@@ -40,6 +46,14 @@ public class UsuarioInserirDTO {
 
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
+	}
+
+	public Set<Perfil> getPerfis() {
+		return perfis;
+	}
+
+	public void setPerfis(Set<Perfil> perfis) {
+		this.perfis = perfis;
 	}
 
 }

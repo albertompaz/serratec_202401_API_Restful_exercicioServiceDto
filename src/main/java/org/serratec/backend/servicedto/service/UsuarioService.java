@@ -1,15 +1,20 @@
 package org.serratec.backend.servicedto.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.serratec.backend.servicedto.dto.UsuarioDTO;
 import org.serratec.backend.servicedto.dto.UsuarioInserirDTO;
 import org.serratec.backend.servicedto.exception.EmailException;
 import org.serratec.backend.servicedto.exception.NotFoundException;
 import org.serratec.backend.servicedto.exception.SenhaException;
+import org.serratec.backend.servicedto.model.Perfil;
 import org.serratec.backend.servicedto.model.Usuario;
+import org.serratec.backend.servicedto.model.UsuarioPerfil;
 import org.serratec.backend.servicedto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +22,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
 
+	@Autowired
+	private PerfilService perfilService;
+	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 	
@@ -56,6 +64,16 @@ public class UsuarioService {
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
 		usuario.setSenha(usuarioInserirDTO.getSenha());
+		
+		Set<UsuarioPerfil> usuarioPerfis = new HashSet<>();
+		for(Perfil perfil: usuarioInserirDTO.getPerfis()) {
+			perfil = perfilService.buscar(perfil.getId());
+			UsuarioPerfil usuarioPerfil = new UsuarioPerfil(usuario, perfil, LocalDate.now());
+			usuarioPerfis.add(usuarioPerfil);
+		}
+		
+		usuario.setUsuarioPerfis(usuarioPerfis);
+		
 		usuario = usuarioRepository.save(usuario);
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
