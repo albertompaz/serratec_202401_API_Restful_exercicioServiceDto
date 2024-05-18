@@ -2,6 +2,7 @@ package org.serratec.backend.servicedto.controller;
 
 import java.util.List;
 
+import org.serratec.backend.servicedto.dto.FuncionarioSalarioDTO;
 import org.serratec.backend.servicedto.model.Funcionario;
 import org.serratec.backend.servicedto.repository.FuncionarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,19 @@ public class FuncionarioController {
 		//Page<Funcionario> funcionarios = funcionarioRepository.findBySalarioGreaterThanEqualAndSalarioLessThanEqual(valorMinimo, valoMaximo, pageable);
 		//Page<Funcionario> funcionarios = funcionarioRepository.buscarSalarioNativo(valorMinimo, valoMaximo, pageable);
 		return ResponseEntity.ok(funcionarios);
+	}
+	
+	@GetMapping("/nome")
+	public ResponseEntity<Page<Funcionario>> buscarPorNome(
+			@RequestParam(defaultValue = "") String paramNome, Pageable pageable) {
+		Page<Funcionario> funcionarios = funcionarioRepository.buscarPorNome(paramNome, pageable);
+		return ResponseEntity.ok(funcionarios);
+	}
+	
+	@GetMapping("/salarios-por-idade")
+	public ResponseEntity<List<FuncionarioSalarioDTO>> buscarSalariosPorIdade() {
+		List<FuncionarioSalarioDTO> funcionariosSalarioDTO = funcionarioRepository.buscarSalarioPorIdade();
+		return ResponseEntity.ok(funcionariosSalarioDTO);
 	}
 
 }
