@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.serratec.backend.servicedto.config.MailConfig;
 import org.serratec.backend.servicedto.dto.UsuarioDTO;
 import org.serratec.backend.servicedto.dto.UsuarioInserirDTO;
 import org.serratec.backend.servicedto.exception.EmailException;
@@ -32,6 +33,9 @@ public class UsuarioService {
 	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	private MailConfig mailConfig;
 	
 	public List<UsuarioDTO> findAll() {
 		 List<Usuario> usuarios = usuarioRepository.findAll();
@@ -81,6 +85,8 @@ public class UsuarioService {
 		usuario.setUsuarioPerfis(usuarioPerfis);
 		
 		usuario = usuarioRepository.save(usuario);
+		
+		mailConfig.sendEmail(usuario.getEmail(), "Cadastro de Usuario", usuario.toString());
 		
 		UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
 		return usuarioDTO;

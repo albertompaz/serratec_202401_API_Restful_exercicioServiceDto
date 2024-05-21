@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -147,6 +148,18 @@ public class Usuario implements UserDetails, Serializable {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "* Código: " + id +
+				"\n* Nome: " + nome + 
+				"\n* Email: " + email + 
+				"\n* Perfis: " + 
+				usuarioPerfis
+					.stream()
+					.map(up -> up.getId().getPerfil().getNome())
+					.collect(Collectors.joining(", "));
 	};
 
 }
