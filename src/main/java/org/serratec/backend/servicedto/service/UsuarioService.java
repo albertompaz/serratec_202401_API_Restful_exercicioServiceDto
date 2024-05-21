@@ -17,6 +17,7 @@ import org.serratec.backend.servicedto.model.Usuario;
 import org.serratec.backend.servicedto.model.UsuarioPerfil;
 import org.serratec.backend.servicedto.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class UsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
 	public List<UsuarioDTO> findAll() {
 		 List<Usuario> usuarios = usuarioRepository.findAll();
@@ -65,7 +69,7 @@ public class UsuarioService {
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 		
 		Set<UsuarioPerfil> usuarioPerfis = new HashSet<>();
 		for(Perfil perfil: usuarioInserirDTO.getPerfis()) {
