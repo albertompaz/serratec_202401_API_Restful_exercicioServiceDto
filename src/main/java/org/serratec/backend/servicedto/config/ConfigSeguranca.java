@@ -38,6 +38,7 @@ public class ConfigSeguranca {
 		.cors((cors) -> cors.configurationSource(corsConfigurationSource()))
 		.httpBasic(Customizer.withDefaults()).authorizeHttpRequests(requests -> {
 			requests.requestMatchers(HttpMethod.GET, "/login").permitAll();
+			requests.requestMatchers(HttpMethod.GET, "/enderecos/**").permitAll();
 			requests.requestMatchers(HttpMethod.GET, "/usuarios").hasAnyAuthority("ADMIN", "USER");
 			requests.requestMatchers(HttpMethod.POST, "/usuarios").hasAuthority("ADMIN")
 			.anyRequest().authenticated();
